@@ -4,4 +4,8 @@
     <string name="password">Password</string>
     <string name="masuk">Masuk</string>
     <string name="nama">Nama</string>
+    <string name="description">Description</string>
+    <string name="tambah">Tambah</string>
+    <string name="logout">Logout</string>
+    <string name="ubah_bahasa">Bahasa</string>
 </resources>

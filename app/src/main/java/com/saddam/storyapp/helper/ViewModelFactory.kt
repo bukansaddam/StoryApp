@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.saddam.storyapp.data.Repository
 import com.saddam.storyapp.di.Injection
 import com.saddam.storyapp.ui.login.LoginViewModel
+import com.saddam.storyapp.ui.main.MainViewModel
 import com.saddam.storyapp.ui.register.RegisterViewModel
 
 class ViewModelFactory private constructor(private val repository: Repository) :
@@ -16,6 +17,8 @@ ViewModelProvider.NewInstanceFactory() {
             return LoginViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(RegisterViewModel::class.java)){
             return RegisterViewModel(repository) as T
+        }else if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+            return MainViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

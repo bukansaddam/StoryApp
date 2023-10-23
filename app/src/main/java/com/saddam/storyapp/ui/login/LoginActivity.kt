@@ -14,6 +14,7 @@ import androidx.core.view.isVisible
 import com.saddam.storyapp.databinding.ActivityLoginBinding
 import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
+import com.saddam.storyapp.ui.main.MainActivity
 import com.saddam.storyapp.ui.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -78,6 +79,7 @@ class LoginActivity : AppCompatActivity() {
                     is Result.Success -> {
                         binding.progressBar.isVisible = false
                         Toast.makeText(this, result.data.message, Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     }
                 }
             }

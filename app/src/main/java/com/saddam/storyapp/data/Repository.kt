@@ -8,6 +8,7 @@ import com.saddam.storyapp.data.pref.UserModel
 import com.saddam.storyapp.data.pref.UserPreference
 import com.saddam.storyapp.data.response.LoginResponse
 import com.saddam.storyapp.data.response.RegisterResponse
+import com.saddam.storyapp.data.response.StoryResponse
 import com.saddam.storyapp.data.retrofit.ApiService
 import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.utils.AppExecutors
@@ -90,7 +91,30 @@ class Repository private constructor(
                 Log.e("Repository", "onFailure: ${t.message}", )
                 result.value = Result.Error(t.message.toString())
             }
+        })
+        return result
+    }
 
+    fun getAllstories() : LiveData<Result<StoryResponse>>{
+        val result = MutableLiveData<Result<StoryResponse>>()
+        result.value = Result.Loading
+
+        val client = apiService.getAllStories()
+        client.enqueue(object : Callback<StoryResponse>{
+            override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
+                if (response.isSuccessful){
+                    val responseBody = response.body()!!
+                    result.value = Result.Success(responseBody)
+                }else{
+                    Log.e(TAG, "onResponse: ${response.message()}", )
+                    result.value = Result.Error(response.message())
+                }
+            }
+
+            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+                Log.e("Repository", "onFailure: ${t.message}", )
+                result.value = Result.Error(t.message.toString())
+            }
         })
         return result
     }
