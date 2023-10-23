@@ -1,13 +1,20 @@
 package com.saddam.storyapp.ui.login
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.core.view.isVisible
 import com.saddam.storyapp.databinding.ActivityLoginBinding
 import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
+import com.saddam.storyapp.ui.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -23,6 +30,18 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupAction()
+        playAnimation()
+    }
+
+    private fun playAnimation() {
+        val title = ObjectAnimator.ofFloat(binding.tvTitle, View.ALPHA, 1f).setDuration(1000)
+        val subTitle = ObjectAnimator.ofFloat(binding.tvSubtitle, View.ALPHA, 1f).setDuration(500)
+        val dirRegister = ObjectAnimator.ofFloat(binding.tvDirRegister, View.ALPHA, 1f).setDuration(500)
+
+        AnimatorSet().apply {
+            playSequentially(title, subTitle, dirRegister)
+            start()
+        }
     }
 
     private fun setupAction() {
@@ -30,6 +49,18 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.edLoginEmail.text.toString()
             val password = binding.edLoginPassword.text.toString()
             loginUser(email, password)
+        }
+
+        binding.tvRegister.setOnClickListener {
+            val optionsCompat: ActivityOptionsCompat =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this,
+                    Pair(binding.edLoginName, "name"),
+                    Pair(binding.edLoginEmail, "email"),
+                    Pair(binding.edLoginPassword, "password"),
+                )
+
+            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java), optionsCompat.toBundle())
         }
     }
 

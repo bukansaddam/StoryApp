@@ -7,26 +7,30 @@
     tools:context=".ui.login.LoginActivity">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:text="Welcome Back!"
         android:textColor="@color/white"
         android:textSize="30sp"
+        android:alpha="0"
+        tools:alpha="100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Sign in to your account"
-        app:layout_constraintEnd_toEndOf="@+id/textView3"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        android:alpha="0"
+        tools:alpha="100"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -35,16 +39,27 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/tv_subtitle">
+
+        <EditText
+            android:id="@+id/ed_login_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_edit_text"
+            android:hint="@string/nama"
+            android:padding="30dp"
+            android:transitionName="name"
+            android:visibility="gone" />
 
         <com.saddam.storyapp.ui.custom.EmailEditText
             android:id="@+id/ed_login_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="30dp" />
+            android:padding="30dp"
+            android:transitionName="email" />
 
         <com.saddam.storyapp.ui.custom.PasswordEditText
             android:id="@+id/ed_login_password"
@@ -52,7 +67,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:inputType="textPassword"
-            android:padding="30dp" />
+            android:padding="30dp"
+            android:transitionName="password" />
 
     </LinearLayout>
 
@@ -66,16 +82,18 @@
         android:background="@drawable/bg_button"
         android:text="@string/masuk"
         android:padding="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/tv_dir_register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/tv_dir_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:orientation="horizontal"
+        android:alpha="0"
+        tools:alpha="100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

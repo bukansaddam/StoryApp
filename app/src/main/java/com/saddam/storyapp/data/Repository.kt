@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.saddam.storyapp.data.pref.UserModel
 import com.saddam.storyapp.data.pref.UserPreference
 import com.saddam.storyapp.data.response.LoginResponse
+import com.saddam.storyapp.data.response.RegisterResponse
 import com.saddam.storyapp.data.retrofit.ApiService
 import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.utils.AppExecutors
@@ -62,6 +63,34 @@ class Repository private constructor(
                 Log.e("Repository", "onFailure: ${t.message}", )
                 result.value = Result.Error(t.message.toString())
             }
+        })
+        return result
+    }
+
+    fun register(name: String, email: String, password: String): LiveData<Result<RegisterResponse>>{
+        val result = MutableLiveData<Result<RegisterResponse>>()
+        result.value = Result.Loading
+
+        val client = apiService.register(name, email, password)
+        client.enqueue(object: Callback<RegisterResponse>{
+            override fun onResponse(
+                call: Call<RegisterResponse>,
+                response: Response<RegisterResponse>
+            ) {
+                if (response.isSuccessful){
+                    val responseBody = response.body()!!
+                    result.value = Result.Success(responseBody)
+                }else{
+                    Log.e(TAG, "onResponse: ${response.message()}", )
+                    result.value = Result.Error(response.message())
+                }
+            }
+
+            override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                Log.e("Repository", "onFailure: ${t.message}", )
+                result.value = Result.Error(t.message.toString())
+            }
+
         })
         return result
     }
