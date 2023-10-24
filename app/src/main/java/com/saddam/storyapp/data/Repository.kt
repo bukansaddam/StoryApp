@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.saddam.storyapp.data.pref.UserModel
 import com.saddam.storyapp.data.pref.UserPreference
+import com.saddam.storyapp.data.response.DetailResponse
 import com.saddam.storyapp.data.response.LoginResponse
 import com.saddam.storyapp.data.response.RegisterResponse
 import com.saddam.storyapp.data.response.StoryResponse
@@ -106,6 +107,7 @@ class Repository private constructor(
                 if (response.isSuccessful){
                     val responseBody = response.body()!!
                     result.value = Result.Success(responseBody)
+                    Log.i(TAG, "onSuccess : ${responseBody.listStory}")
                 }else{
                     Log.e("getAllStory", "onResponse: ${response.message()}", )
                     result.value = Result.Error(response.message())
@@ -113,9 +115,34 @@ class Repository private constructor(
             }
 
             override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-                Log.e("getAllStory", "onFailure: ${t.toString()}", )
+                Log.e("getAllStory", "onFailure: $t", )
                 result.value = Result.Error(t.message.toString())
             }
+        })
+        return result
+    }
+
+    fun getDetail(id: String) : LiveData<Result<DetailResponse>>{
+        val result = MutableLiveData<Result<DetailResponse>>()
+        result.value = Result.Loading
+
+        val client = apiService.getDetail(id)
+        client.enqueue(object : Callback<DetailResponse>{
+            override fun onResponse(call: Call<DetailResponse>, response: Response<DetailResponse>) {
+                if (response.isSuccessful){
+                    val responseBody = response.body()!!
+                    result.value = Result.Success(responseBody)
+                    Log.i("Detail", "onResponse: $responseBody")
+                }else{
+                    Log.e("Detail", "error: ${response.message()}", )
+                    result.value = Result.Error(response.message())
+                }
+            }
+
+            override fun onFailure(call: Call<DetailResponse>, t: Throwable) {
+                result.value = Result.Error(t.message.toString())
+            }
+
         })
         return result
     }

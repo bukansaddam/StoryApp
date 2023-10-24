@@ -1,5 +1,6 @@
 package com.saddam.storyapp.data.retrofit
 
+import com.saddam.storyapp.data.response.DetailResponse
 import com.saddam.storyapp.data.response.LoginResponse
 import com.saddam.storyapp.data.response.RegisterResponse
 import com.saddam.storyapp.data.response.StoryResponse
@@ -8,6 +9,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
 
@@ -21,4 +23,7 @@ interface ApiService {
 
     @GET("stories")
     fun getAllStories(): Call<StoryResponse>
+
+    @GET("stories/{id}")
+    fun getDetail(@Path("id") id: String): Call<DetailResponse>
 }

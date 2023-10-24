@@ -12,6 +12,7 @@ import com.saddam.storyapp.data.response.ListStoryItem
 import com.saddam.storyapp.databinding.ActivityMainBinding
 import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
+import com.saddam.storyapp.ui.detail.DetailActivity
 import com.saddam.storyapp.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setupToolbar()
         setupList()
         setupData()
-        setupAction()
+//        setupAction()
     }
 
     private fun setupToolbar() {
@@ -62,8 +63,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showSelectedStory(data: ListStoryItem) {
-        Toast.makeText(this, data.name, Toast.LENGTH_SHORT).show()
+        val intent = Intent(this@MainActivity, DetailActivity::class.java)
+        intent.putExtra(DetailActivity.EXTRA_ID, data.id)
+        startActivity(intent)
     }
+
 
 
     private fun setupData() {

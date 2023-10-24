@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.saddam.storyapp.data.Repository
 import com.saddam.storyapp.di.Injection
+import com.saddam.storyapp.ui.detail.DetailViewModel
 import com.saddam.storyapp.ui.login.LoginViewModel
 import com.saddam.storyapp.ui.main.MainViewModel
 import com.saddam.storyapp.ui.register.RegisterViewModel
@@ -22,6 +23,8 @@ ViewModelProvider.NewInstanceFactory() {
             return MainViewModel(repository) as T
         }else if (modelClass.isAssignableFrom(SplashViewModel::class.java)) {
             return SplashViewModel(repository) as T
+        }else if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
+            return DetailViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }
