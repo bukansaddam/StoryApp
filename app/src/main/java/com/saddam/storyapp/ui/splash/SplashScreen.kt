@@ -1,4 +1,4 @@
-package com.saddam.storyapp.ui
+package com.saddam.storyapp.ui.splash
 
 import android.content.Intent
 import android.os.Build
@@ -7,11 +7,19 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.saddam.storyapp.R
+import com.saddam.storyapp.helper.ViewModelFactory
 import com.saddam.storyapp.ui.login.LoginActivity
+import com.saddam.storyapp.ui.main.MainActivity
 
 class SplashScreen : AppCompatActivity() {
+
+    private val viewModel by viewModels<SplashViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
@@ -33,8 +41,15 @@ class SplashScreen : AppCompatActivity() {
         supportActionBar?.hide()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this@SplashScreen, LoginActivity::class.java))
-            finish()
+            viewModel.getUser().observe(this){ user ->
+                if (!user.isLogin){
+                    startActivity(Intent(this@SplashScreen, LoginActivity::class.java))
+                    finish()
+                }else{
+                    startActivity(Intent(this@SplashScreen, MainActivity::class.java))
+                    finish()
+                }
+            }
         }, 3000)
     }
 }

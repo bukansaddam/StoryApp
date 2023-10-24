@@ -4,7 +4,7 @@
 
     <group android:menuCategory="container">
         <item
-            android:id="@+id/menu_favorite"
+            android:id="@+id/menu_add"
             android:icon="@drawable/ic_add_24"
             android:title="@string/tambah"
             app:showAsAction="ifRoom" />
@@ -15,7 +15,7 @@
             app:showAsAction="never" />
 
         <item
-            android:id="@+id/menu_setting"
+            android:id="@+id/menu_logout"
             android:title="@string/logout"
             app:showAsAction="never" />
     </group>

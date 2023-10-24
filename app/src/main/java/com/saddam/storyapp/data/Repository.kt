@@ -50,6 +50,7 @@ class Repository private constructor(
                     val responseBody = response.body()!!
                     val token = responseBody.loginResult?.token
                     val user = UserModel(email, token.toString())
+                    Log.i(TAG, "token: ${token.toString()}")
                     val coroutine = CoroutineScope(Dispatchers.IO)
                     coroutine.launch { saveSession(user) }
                     Log.i(TAG, "onResponse: login berhasil")
@@ -106,13 +107,13 @@ class Repository private constructor(
                     val responseBody = response.body()!!
                     result.value = Result.Success(responseBody)
                 }else{
-                    Log.e(TAG, "onResponse: ${response.message()}", )
+                    Log.e("getAllStory", "onResponse: ${response.message()}", )
                     result.value = Result.Error(response.message())
                 }
             }
 
             override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-                Log.e("Repository", "onFailure: ${t.message}", )
+                Log.e("getAllStory", "onFailure: ${t.toString()}", )
                 result.value = Result.Error(t.message.toString())
             }
         })

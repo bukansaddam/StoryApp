@@ -1,19 +1,23 @@
 package com.saddam.storyapp.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.saddam.storyapp.R
 import com.saddam.storyapp.data.response.ListStoryItem
 import com.saddam.storyapp.databinding.ActivityMainBinding
 import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
+import com.saddam.storyapp.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val adapter = StoryAdapter()
 
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
@@ -31,12 +35,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-
+        binding.appBar.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.menu_add -> {
+                    true
+                }
+                R.id.menu_language -> {
+                    true
+                }
+                R.id.menu_logout -> {
+                    viewModel.logout()
+                    startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun setupAction() {
-        val adapter = StoryAdapter()
-        adapter.setOnClickCallback(object: StoryAdapter.OnItemClickCallback {
+        adapter.setOnClickCallback(object : StoryAdapter.OnItemClickCallback {
             override fun onItemClicked(data: ListStoryItem) {
                 showSelectedStory(data)
             }
@@ -69,7 +87,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setStoryData(data: List<ListStoryItem?>?) {
-        val adapter = StoryAdapter()
         adapter.submitList(data)
         binding.rvStory.adapter = adapter
     }
