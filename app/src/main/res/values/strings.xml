@@ -11,4 +11,13 @@
     <string name="galeri">Galeri</string>
     <string name="kamera">Kamera</string>
     <string name="tambah_story">Tambah Story</string>
+    <string name="preview_image">Preview Image</string>
+    <string name="kirim">kirim</string>
+    <string name="greeting">Welcome Back!</string>
+    <string name="petunjuk">Sign in to your account</string>
+    <string name="petunjuk_register">Tidak Punya Akun ?</string>
+    <string name="register">Buat Akun</string>
+    <string name="greeting_register">Create New Account</string>
+    <string name="petunjuk_form">Fill in the form to continue</string>
+    <string name="petunjuk_login">Sudah Punya Akun ?</string>
 </resources>

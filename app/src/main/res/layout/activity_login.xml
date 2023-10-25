@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
-        android:text="Welcome Back!"
+        android:text="@string/greeting"
         android:textColor="@color/white"
         android:textSize="30sp"
         android:alpha="0"
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Sign in to your account"
+        android:text="@string/petunjuk"
         android:alpha="0"
         tools:alpha="100"
         app:layout_constraintEnd_toEndOf="@+id/tv_title"
@@ -101,14 +101,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tidak Punya Akun ?"
+            android:text="@string/petunjuk_register"
             android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/tv_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Buat Akun"
+            android:text="@string/register"
             android:layout_marginStart="8dp"
             android:textColor="@color/light_blue" />
 

@@ -19,7 +19,6 @@ import com.saddam.storyapp.ui.story.AddStoryActivity
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val adapter = StoryAdapter()
 
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
@@ -39,10 +38,8 @@ class MainActivity : AppCompatActivity() {
     private fun getSession(){
         viewModel.getSession().observe(this){user ->
             if (user.token.isNotBlank()){
-                setupData()
-                Toast.makeText(this, user.token, Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(this, "ketemu", Toast.LENGTH_SHORT).show()
+                val token = user.token
+                setupData(token)
             }
         }
     }
@@ -68,13 +65,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupAction() {
-        adapter.setOnClickCallback(object : StoryAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListStoryItem) {
-                showSelectedStory(data)
-            }
-        })
-    }
+//    private fun setupAction() {
+//        adapter.setOnClickCallback(object : StoryAdapter.OnItemClickCallback {
+//            override fun onItemClicked(data: ListStoryItem) {
+//                showSelectedStory(data)
+//            }
+//        })
+//    }
 
     private fun showSelectedStory(data: ListStoryItem) {
         val intent = Intent(this@MainActivity, DetailActivity::class.java)
@@ -84,8 +81,8 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun setupData() {
-        viewModel.getAllStories().observe(this){ result ->
+    private fun setupData(token: String) {
+        viewModel.getAllStories(token).observe(this){ result ->
             if (result != null){
                 when(result){
                     is Result.Loading -> {
@@ -97,14 +94,15 @@ class MainActivity : AppCompatActivity() {
                     }
                     is Result.Success -> {
                         binding.progressBar.isVisible = false
-                        setStoryData(result.data.listStory)
+                        setStoryData(token, result.data.listStory)
                     }
                 }
             }
         }
     }
 
-    private fun setStoryData(data: List<ListStoryItem?>?) {
+    private fun setStoryData(token: String, data: List<ListStoryItem?>?) {
+        val adapter = StoryAdapter(token)
         adapter.submitList(data)
         binding.rvStory.adapter = adapter
     }

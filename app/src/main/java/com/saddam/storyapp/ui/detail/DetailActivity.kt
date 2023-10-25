@@ -20,6 +20,7 @@ class DetailActivity : AppCompatActivity() {
 
     companion object{
         const val EXTRA_ID = "extra_id"
+        const val EXTRA_TOKEN = "extra_token"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,12 +29,13 @@ class DetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val id = intent.getStringExtra(EXTRA_ID)
+        val token = intent.getStringExtra(EXTRA_TOKEN)
 
-        setupViewModel(id.toString())
+        setupViewModel(token.toString(), id.toString())
     }
 
-    private fun setupViewModel(id: String) {
-        viewModel.getUser(id).observe(this){result ->
+    private fun setupViewModel(token: String, id: String) {
+        viewModel.getUser(token,id).observe(this){result ->
             when(result){
                 is Result.Loading -> {
                     binding.progressBar.isVisible = true

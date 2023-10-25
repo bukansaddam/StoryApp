@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.saddam.storyapp.R
 import com.saddam.storyapp.helper.ViewModelFactory
 import com.saddam.storyapp.ui.login.LoginActivity
+import com.saddam.storyapp.ui.main.MainActivity
 
 class SplashScreen : AppCompatActivity() {
 
@@ -39,21 +40,21 @@ class SplashScreen : AppCompatActivity() {
         }
         supportActionBar?.hide()
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this@SplashScreen, LoginActivity::class.java))
-            finish()
-        }, 3000)
-
 //        Handler(Looper.getMainLooper()).postDelayed({
-//            viewModel.getUser().observe(this){ user ->
-//                if (!user.isLogin){
-//                    startActivity(Intent(this@SplashScreen, LoginActivity::class.java))
-//                    finish()
-//                }else{
-//                    startActivity(Intent(this@SplashScreen, MainActivity::class.java))
-//                    finish()
-//                }
-//            }
+//            startActivity(Intent(this@SplashScreen, LoginActivity::class.java))
+//            finish()
 //        }, 3000)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            viewModel.getUser().observe(this){ user ->
+                if (!user.isLogin){
+                    startActivity(Intent(this@SplashScreen, LoginActivity::class.java))
+                    finish()
+                }else{
+                    startActivity(Intent(this@SplashScreen, MainActivity::class.java))
+                    finish()
+                }
+            }
+        }, 3000)
     }
 }

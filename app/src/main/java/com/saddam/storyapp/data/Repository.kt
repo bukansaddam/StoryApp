@@ -94,11 +94,11 @@ class Repository private constructor(
         return result
     }
 
-    fun getAllstories() : LiveData<Result<StoryResponse>>{
+    fun getAllstories(token: String) : LiveData<Result<StoryResponse>>{
         val result = MutableLiveData<Result<StoryResponse>>()
         result.value = Result.Loading
 
-        apiService.getAllStories().enqueue(object : Callback<StoryResponse>{
+        apiService.getAllStories("Bearer $token").enqueue(object : Callback<StoryResponse>{
             override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
                 if (response.isSuccessful){
                     val responseBody = response.body()!!
@@ -118,11 +118,11 @@ class Repository private constructor(
         return result
     }
 
-    fun getDetail(id: String) : LiveData<Result<DetailResponse>>{
+    fun getDetail(token: String, id: String) : LiveData<Result<DetailResponse>>{
         val result = MutableLiveData<Result<DetailResponse>>()
         result.value = Result.Loading
 
-        val client = apiService.getDetail(id)
+        val client = apiService.getDetail("Bearer $token",id)
         client.enqueue(object : Callback<DetailResponse>{
             override fun onResponse(call: Call<DetailResponse>, response: Response<DetailResponse>) {
                 if (response.isSuccessful){
