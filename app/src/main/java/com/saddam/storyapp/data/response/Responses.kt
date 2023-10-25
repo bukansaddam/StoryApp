@@ -106,3 +106,12 @@ data class Story(
 	@field:SerializedName("lat")
 	val lat: Any? = null
 )
+
+data class FileUploadResponse(
+
+	@field:SerializedName("error")
+	val error: Boolean? = null,
+
+	@field:SerializedName("message")
+	val message: String? = null
+)

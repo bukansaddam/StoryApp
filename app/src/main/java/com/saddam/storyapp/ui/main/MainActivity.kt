@@ -14,6 +14,7 @@ import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
 import com.saddam.storyapp.ui.detail.DetailActivity
 import com.saddam.storyapp.ui.login.LoginActivity
+import com.saddam.storyapp.ui.story.AddStoryActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,9 +30,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupData()
         setupToolbar()
         setupList()
-        setupData()
 //        setupAction()
     }
 
@@ -39,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         binding.appBar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.menu_add -> {
+                    val intent = Intent(this@MainActivity, AddStoryActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.menu_language -> {

@@ -10,6 +10,7 @@ import com.saddam.storyapp.ui.login.LoginViewModel
 import com.saddam.storyapp.ui.main.MainViewModel
 import com.saddam.storyapp.ui.register.RegisterViewModel
 import com.saddam.storyapp.ui.splash.SplashViewModel
+import com.saddam.storyapp.ui.story.StoryViewModel
 
 class ViewModelFactory private constructor(private val repository: Repository) :
 ViewModelProvider.NewInstanceFactory() {
@@ -25,6 +26,8 @@ ViewModelProvider.NewInstanceFactory() {
             return SplashViewModel(repository) as T
         }else if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
             return DetailViewModel(repository) as T
+        }else if (modelClass.isAssignableFrom(StoryViewModel::class.java)) {
+            return StoryViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

@@ -7,16 +7,16 @@ import androidx.lifecycle.MutableLiveData
 import com.saddam.storyapp.data.pref.UserModel
 import com.saddam.storyapp.data.pref.UserPreference
 import com.saddam.storyapp.data.response.DetailResponse
+import com.saddam.storyapp.data.response.FileUploadResponse
 import com.saddam.storyapp.data.response.LoginResponse
 import com.saddam.storyapp.data.response.RegisterResponse
 import com.saddam.storyapp.data.response.StoryResponse
 import com.saddam.storyapp.data.retrofit.ApiService
 import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.utils.AppExecutors
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,11 +49,11 @@ class Repository private constructor(
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()!!
-                    val token = responseBody.loginResult?.token
-                    val user = UserModel(email, token.toString())
-                    Log.i(TAG, "token: ${token.toString()}")
-                    val coroutine = CoroutineScope(Dispatchers.IO)
-                    coroutine.launch { saveSession(user) }
+//                    val token = responseBody.loginResult?.token
+//                    val user = UserModel(email, token.toString())
+//                    Log.i(TAG, "token: ${token.toString()}")
+//                    val coroutine = CoroutineScope(Dispatchers.IO)
+//                    coroutine.launch { saveSession(user) }
                     Log.i(TAG, "onResponse: login berhasil")
                     result.value = Result.Success(responseBody)
                 }else{
@@ -140,6 +140,32 @@ class Repository private constructor(
             }
 
             override fun onFailure(call: Call<DetailResponse>, t: Throwable) {
+                result.value = Result.Error(t.message.toString())
+            }
+
+        })
+        return result
+    }
+
+    fun sendStory(file: MultipartBody.Part, description: RequestBody) : LiveData<Result<FileUploadResponse>>{
+        val result = MutableLiveData<Result<FileUploadResponse>>()
+        result.value = Result.Loading
+
+        val client = apiService.addStory(file, description)
+        client.enqueue(object: Callback<FileUploadResponse>{
+            override fun onResponse(
+                call: Call<FileUploadResponse>,
+                response: Response<FileUploadResponse>
+            ) {
+                if (response.isSuccessful){
+                    val responseBody = response.body()!!
+                    result.value = Result.Success(responseBody)
+                }else{
+                    result.value = Result.Error(response.message())
+                }
+            }
+
+            override fun onFailure(call: Call<FileUploadResponse>, t: Throwable) {
                 result.value = Result.Error(t.message.toString())
             }
 

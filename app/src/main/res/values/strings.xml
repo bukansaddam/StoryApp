@@ -8,4 +8,7 @@
     <string name="tambah">Tambah</string>
     <string name="logout">Logout</string>
     <string name="ubah_bahasa">Bahasa</string>
+    <string name="galeri">Galeri</string>
+    <string name="kamera">Kamera</string>
+    <string name="tambah_story">Tambah Story</string>
 </resources>

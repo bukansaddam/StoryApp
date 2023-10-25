@@ -11,11 +11,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.core.view.isVisible
+import com.saddam.storyapp.data.pref.UserModel
 import com.saddam.storyapp.databinding.ActivityLoginBinding
 import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
 import com.saddam.storyapp.ui.main.MainActivity
 import com.saddam.storyapp.ui.register.RegisterActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
@@ -80,10 +84,15 @@ class LoginActivity : AppCompatActivity() {
                     is Result.Success -> {
                         binding.progressBar.isVisible = false
                         Toast.makeText(this, result.data.message, Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        val token = result.data.loginResult?.token.toString()
+                        val user = UserModel(email, token)
+                        CoroutineScope(Dispatchers.IO).launch {
+                            viewModel.saveSession(user)
+                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                            }
+                        }
                     }
                 }
             }
         }
     }
-}
