@@ -30,10 +30,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupData()
+        getSession()
         setupToolbar()
         setupList()
 //        setupAction()
+    }
+
+    private fun getSession(){
+        viewModel.getSession().observe(this){user ->
+            if (user.token.isNotBlank()){
+                setupData()
+                Toast.makeText(this, user.token, Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this, "ketemu", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setupToolbar() {

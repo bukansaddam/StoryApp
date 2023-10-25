@@ -20,12 +20,13 @@ import com.saddam.storyapp.ui.register.RegisterActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
-    private val viewModel by viewModels<LoginViewModel>{
+    private val viewModel by viewModels<LoginViewModel> {
         ViewModelFactory.getInstance(this)
     }
 
@@ -42,7 +43,8 @@ class LoginActivity : AppCompatActivity() {
     private fun playAnimation() {
         val title = ObjectAnimator.ofFloat(binding.tvTitle, View.ALPHA, 1f).setDuration(1000)
         val subTitle = ObjectAnimator.ofFloat(binding.tvSubtitle, View.ALPHA, 1f).setDuration(500)
-        val dirRegister = ObjectAnimator.ofFloat(binding.tvDirRegister, View.ALPHA, 1f).setDuration(500)
+        val dirRegister =
+            ObjectAnimator.ofFloat(binding.tvDirRegister, View.ALPHA, 1f).setDuration(500)
 
         AnimatorSet().apply {
             playSequentially(title, subTitle, dirRegister)
@@ -66,21 +68,26 @@ class LoginActivity : AppCompatActivity() {
                     Pair(binding.edLoginPassword, "password"),
                 )
 
-            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java), optionsCompat.toBundle())
+            startActivity(
+                Intent(this@LoginActivity, RegisterActivity::class.java),
+                optionsCompat.toBundle()
+            )
         }
     }
 
-    private fun loginUser(email: String, password: String){
-        viewModel.login(email, password).observe(this){result ->
-            if (result != null){
-                when(result){
+    private fun loginUser(email: String, password: String) {
+        viewModel.login(email, password).observe(this) { result ->
+            if (result != null) {
+                when (result) {
                     is Result.Loading -> {
                         binding.progressBar.isVisible = true
                     }
+
                     is Result.Error -> {
                         binding.progressBar.isVisible = false
                         Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
                     }
+
                     is Result.Success -> {
                         binding.progressBar.isVisible = false
                         Toast.makeText(this, result.data.message, Toast.LENGTH_SHORT).show()
@@ -88,7 +95,8 @@ class LoginActivity : AppCompatActivity() {
                         val user = UserModel(email, token)
                         CoroutineScope(Dispatchers.IO).launch {
                             viewModel.saveSession(user)
-                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                            withContext(Dispatchers.Main){
+                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                             }
                         }
                     }
@@ -96,3 +104,4 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+}

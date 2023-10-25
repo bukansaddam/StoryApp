@@ -13,7 +13,6 @@ import com.saddam.storyapp.data.response.RegisterResponse
 import com.saddam.storyapp.data.response.StoryResponse
 import com.saddam.storyapp.data.retrofit.ApiService
 import com.saddam.storyapp.helper.Result
-import com.saddam.storyapp.utils.AppExecutors
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -24,19 +23,17 @@ import retrofit2.Response
 
 class Repository private constructor(
     private val apiService: ApiService,
-    private val userPreference: UserPreference,
-    private val appExecutors: AppExecutors
+    private val userPreference: UserPreference
 ){
     companion object{
         @Volatile
         private var instance: Repository? = null
         fun getInstance(
             apiService: ApiService,
-            userPreference: UserPreference,
-            appExecutors: AppExecutors
+            userPreference: UserPreference
         ): Repository =
             instance ?: synchronized(this){
-                instance ?: Repository(apiService, userPreference, appExecutors)
+                instance ?: Repository(apiService, userPreference)
             }.also { instance = it }
     }
 
@@ -101,8 +98,7 @@ class Repository private constructor(
         val result = MutableLiveData<Result<StoryResponse>>()
         result.value = Result.Loading
 
-        val client = apiService.getAllStories()
-        client.enqueue(object : Callback<StoryResponse>{
+        apiService.getAllStories().enqueue(object : Callback<StoryResponse>{
             override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
                 if (response.isSuccessful){
                     val responseBody = response.body()!!
