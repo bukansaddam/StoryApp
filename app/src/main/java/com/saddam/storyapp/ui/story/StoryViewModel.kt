@@ -7,6 +7,6 @@ import okhttp3.RequestBody
 
 class StoryViewModel(private val repository: Repository): ViewModel() {
 
-    fun postStory(file: MultipartBody.Part, description: RequestBody) = repository.sendStory(file, description)
+    fun postStory(token: String, file: MultipartBody.Part, description: RequestBody) = repository.sendStory(token, file, description)
 
 }

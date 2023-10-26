@@ -46,11 +46,6 @@ class Repository private constructor(
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()!!
-//                    val token = responseBody.loginResult?.token
-//                    val user = UserModel(email, token.toString())
-//                    Log.i(TAG, "token: ${token.toString()}")
-//                    val coroutine = CoroutineScope(Dispatchers.IO)
-//                    coroutine.launch { saveSession(user) }
                     Log.i(TAG, "onResponse: login berhasil")
                     result.value = Result.Success(responseBody)
                 }else{
@@ -143,11 +138,11 @@ class Repository private constructor(
         return result
     }
 
-    fun sendStory(file: MultipartBody.Part, description: RequestBody) : LiveData<Result<FileUploadResponse>>{
+    fun sendStory(token: String, file: MultipartBody.Part, description: RequestBody) : LiveData<Result<FileUploadResponse>>{
         val result = MutableLiveData<Result<FileUploadResponse>>()
         result.value = Result.Loading
 
-        val client = apiService.addStory(file, description)
+        val client = apiService.addStory("Bearer $token", file, description)
         client.enqueue(object: Callback<FileUploadResponse>{
             override fun onResponse(
                 call: Call<FileUploadResponse>,

@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.core.view.isVisible
+import com.saddam.storyapp.R
 import com.saddam.storyapp.databinding.ActivityRegisterBinding
 import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
@@ -78,9 +80,26 @@ class RegisterActivity : AppCompatActivity() {
                     is Result.Success -> {
                         binding.progressBar.isVisible = false
                         Toast.makeText(this, result.data.message, Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+                        finish()
                     }
                 }
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        AlertDialog.Builder(this).apply {
+            setTitle(getString(R.string.title_keluar_aplikasi))
+            setMessage(getString(R.string.message_keluar_aplikasi))
+            setPositiveButton(getString(R.string.yakin)){ _, _ ->
+                super.onBackPressed()
+            }
+            setNegativeButton(getString(R.string.batal)) { _, _ ->
+
+            }
+            create()
+            show()
         }
     }
 }
