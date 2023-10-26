@@ -17,10 +17,6 @@ import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
 import com.saddam.storyapp.ui.main.MainActivity
 import com.saddam.storyapp.ui.register.RegisterActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class LoginActivity : AppCompatActivity() {
 
@@ -34,7 +30,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         setupAction()
         playAnimation()
@@ -93,12 +88,8 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this, result.data.message, Toast.LENGTH_SHORT).show()
                         val token = result.data.loginResult?.token.toString()
                         val user = UserModel(email, token)
-                        CoroutineScope(Dispatchers.IO).launch {
-                            viewModel.saveSession(user)
-                            withContext(Dispatchers.Main){
-                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                            }
-                        }
+                        viewModel.saveSession(user)
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     }
                 }
             }
