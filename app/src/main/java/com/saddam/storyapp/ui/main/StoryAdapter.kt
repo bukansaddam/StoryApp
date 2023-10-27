@@ -15,11 +15,9 @@ import com.saddam.storyapp.data.response.ListStoryItem
 import com.saddam.storyapp.databinding.ItemStoryBinding
 import com.saddam.storyapp.ui.detail.DetailActivity
 
-class StoryAdapter(token: String): ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class StoryAdapter(): ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
-    private val token = token
-
-    class MyViewHolder(val binding: ItemStoryBinding, private val token: String): RecyclerView.ViewHolder(binding.root) {
+    class MyViewHolder(val binding: ItemStoryBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(story: ListStoryItem){
             Glide.with(binding.root.context)
                 .load(story.photoUrl)
@@ -30,7 +28,6 @@ class StoryAdapter(token: String): ListAdapter<ListStoryItem, StoryAdapter.MyVie
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, DetailActivity::class.java)
                 intent.putExtra(DetailActivity.EXTRA_ID, story.id)
-                intent.putExtra(DetailActivity.EXTRA_TOKEN, token)
 
                 val optionsCompat: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -48,7 +45,7 @@ class StoryAdapter(token: String): ListAdapter<ListStoryItem, StoryAdapter.MyVie
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(binding, token)
+        return MyViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {

@@ -11,7 +11,6 @@ import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -35,20 +34,16 @@ interface ApiService {
     ): Call<RegisterResponse>
 
     @GET("stories")
-    fun getAllStories(
-        @Header("Authorization") token: String
-    ): Call<StoryResponse>
+    fun getAllStories(): Call<StoryResponse>
 
     @GET("stories/{id}")
     fun getDetail(
-        @Header("Authorization") token: String,
         @Path("id") id: String
     ): Call<DetailResponse>
 
     @Multipart
     @POST("stories")
     fun addStory(
-        @Header("Authorization") token: String,
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody
     ): Call<FileUploadResponse>

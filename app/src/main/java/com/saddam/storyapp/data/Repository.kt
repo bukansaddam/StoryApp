@@ -35,6 +35,10 @@ class Repository private constructor(
             instance ?: synchronized(this){
                 instance ?: Repository(apiService, userPreference)
             }.also { instance = it }
+
+        fun clearInstance(){
+            instance = null
+        }
     }
 
     fun login(email: String, password: String): LiveData<Result<LoginResponse>>{
@@ -89,11 +93,11 @@ class Repository private constructor(
         return result
     }
 
-    fun getAllstories(token: String) : LiveData<Result<StoryResponse>>{
+    fun getAllstories() : LiveData<Result<StoryResponse>>{
         val result = MutableLiveData<Result<StoryResponse>>()
         result.value = Result.Loading
 
-        apiService.getAllStories("Bearer $token").enqueue(object : Callback<StoryResponse>{
+        apiService.getAllStories().enqueue(object : Callback<StoryResponse>{
             override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
                 if (response.isSuccessful){
                     val responseBody = response.body()!!
@@ -113,11 +117,11 @@ class Repository private constructor(
         return result
     }
 
-    fun getDetail(token: String, id: String) : LiveData<Result<DetailResponse>>{
+    fun getDetail(id: String) : LiveData<Result<DetailResponse>>{
         val result = MutableLiveData<Result<DetailResponse>>()
         result.value = Result.Loading
 
-        val client = apiService.getDetail("Bearer $token",id)
+        val client = apiService.getDetail(id)
         client.enqueue(object : Callback<DetailResponse>{
             override fun onResponse(call: Call<DetailResponse>, response: Response<DetailResponse>) {
                 if (response.isSuccessful){
@@ -138,11 +142,11 @@ class Repository private constructor(
         return result
     }
 
-    fun sendStory(token: String, file: MultipartBody.Part, description: RequestBody) : LiveData<Result<FileUploadResponse>>{
+    fun sendStory(file: MultipartBody.Part, description: RequestBody) : LiveData<Result<FileUploadResponse>>{
         val result = MutableLiveData<Result<FileUploadResponse>>()
         result.value = Result.Loading
 
-        val client = apiService.addStory("Bearer $token", file, description)
+        val client = apiService.addStory(file, description)
         client.enqueue(object: Callback<FileUploadResponse>{
             override fun onResponse(
                 call: Call<FileUploadResponse>,

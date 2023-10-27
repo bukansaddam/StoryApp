@@ -31,18 +31,10 @@ class AddStoryActivity : AppCompatActivity() {
 
     private var currentImageUri: Uri? = null
 
-    private var token: String = ""
-
-    companion object{
-        const val EXTRA_TOKEN = "extra_token"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        token = intent.getStringExtra(EXTRA_TOKEN).toString()
 
         binding.btnGalleryFile.setOnClickListener { startGallery() }
         binding.btnGalleryCamera.setOnClickListener { startCamera() }
@@ -63,7 +55,7 @@ class AddStoryActivity : AppCompatActivity() {
                 requestBodyImage
             )
 
-            viewModel.postStory(token, multipartBody, requestBodyDescription).observe(this){ result ->
+            viewModel.postStory(multipartBody, requestBodyDescription).observe(this){ result ->
                 when(result){
                     is Result.Loading -> {
                         binding.progressIndicator.visibility = View.VISIBLE

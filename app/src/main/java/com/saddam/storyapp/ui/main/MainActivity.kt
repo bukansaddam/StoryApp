@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var token: String = ""
+    private val adapter = StoryAdapter()
 
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
@@ -31,27 +32,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        getSession()
+        setupData()
         setupToolbar()
         setupList()
-    }
-
-    private fun getSession(){
-        viewModel.getSession().observe(this){user ->
-            if (user.token.isNotBlank()){
-                token = user.token
-                setupData(token)
-            }
-        }
     }
 
     private fun setupToolbar() {
         binding.appBar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.menu_add -> {
-                    val intent = Intent(this@MainActivity, AddStoryActivity::class.java)
-                    intent.putExtra(AddStoryActivity.EXTRA_TOKEN, token)
-                    startActivity(intent)
+                    startActivity(Intent(this, AddStoryActivity::class.java))
                     true
                 }
                 R.id.menu_language -> {
@@ -80,8 +70,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupData(token: String) {
-        viewModel.getAllStories(token).observe(this){ result ->
+    private fun setupData() {
+        viewModel.getAllStories().observe(this){ result ->
             if (result != null){
                 when(result){
                     is Result.Loading -> {
@@ -93,15 +83,14 @@ class MainActivity : AppCompatActivity() {
                     }
                     is Result.Success -> {
                         binding.progressBar.isVisible = false
-                        setStoryData(token, result.data.listStory)
+                        setStoryData(result.data.listStory)
                     }
                 }
             }
         }
     }
 
-    private fun setStoryData(token: String, data: List<ListStoryItem?>?) {
-        val adapter = StoryAdapter(token)
+    private fun setStoryData(data: List<ListStoryItem?>?) {
         adapter.submitList(data)
         binding.rvStory.adapter = adapter
     }

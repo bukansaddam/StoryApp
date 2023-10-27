@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: Repository): ViewModel() {
 
-    fun getAllStories(token: String) = repository.getAllstories(token)
+    fun getAllStories() = repository.getAllstories()
 
     fun logout() {
         viewModelScope.launch {
