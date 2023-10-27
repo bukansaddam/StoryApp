@@ -39,5 +39,10 @@ ViewModelProvider.NewInstanceFactory() {
             instance ?: synchronized(this) {
                 instance ?: ViewModelFactory(Injection.provideRepository(context))
             }.also { instance = it }
+
+        fun clearInstance(){
+            Repository.clearInstance()
+            instance = null
+        }
     }
 }

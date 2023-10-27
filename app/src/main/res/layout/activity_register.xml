@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
-        android:text="Create New Account"
+        android:text="@string/greeting_register"
         android:textColor="@color/white"
         android:textSize="30sp"
         android:alpha="0"
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Fill in the form to continue"
+        android:text="@string/petunjuk_form"
         android:alpha="0"
         tools:alpha="100"
         app:layout_constraintEnd_toEndOf="@+id/tv_title"
@@ -51,7 +51,9 @@
             android:background="@drawable/bg_edit_text"
             android:hint="@string/nama"
             android:padding="30dp"
-            android:transitionName="name" />
+            android:transitionName="name"
+            android:importantForAutofill="no"
+            android:inputType="text" />
 
         <com.saddam.storyapp.ui.custom.EmailEditText
             android:id="@+id/ed_register_email"
@@ -80,7 +82,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/bg_button"
-        android:text="Register"
+        android:text="@string/register"
         android:padding="30dp"
         app:layout_constraintBottom_toTopOf="@+id/tv_dir_login"
         app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +103,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sudah Punya Akun ?"
+            android:text="@string/petunjuk_login"
             android:textColor="@color/white" />
 
         <TextView

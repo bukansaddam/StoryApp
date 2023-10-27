@@ -2,8 +2,10 @@ package com.saddam.storyapp.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,13 +14,13 @@ import com.saddam.storyapp.data.response.ListStoryItem
 import com.saddam.storyapp.databinding.ActivityMainBinding
 import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
-import com.saddam.storyapp.ui.detail.DetailActivity
 import com.saddam.storyapp.ui.login.LoginActivity
 import com.saddam.storyapp.ui.story.AddStoryActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var token: String = ""
     private val adapter = StoryAdapter()
 
     private val viewModel by viewModels<MainViewModel> {
@@ -30,59 +32,43 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        getSession()
+        setupData()
         setupToolbar()
         setupList()
-//        setupAction()
-    }
-
-    private fun getSession(){
-        viewModel.getSession().observe(this){user ->
-            if (user.token.isNotBlank()){
-                setupData()
-                Toast.makeText(this, user.token, Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(this, "ketemu", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     private fun setupToolbar() {
         binding.appBar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.menu_add -> {
-                    val intent = Intent(this@MainActivity, AddStoryActivity::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, AddStoryActivity::class.java))
                     true
                 }
                 R.id.menu_language -> {
+                    startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
                     true
                 }
                 R.id.menu_logout -> {
-                    viewModel.logout()
-                    startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                    AlertDialog.Builder(this).apply {
+                        setTitle(R.string.title_keluar_akun)
+                        setMessage(getString(R.string.message_logout))
+                        setPositiveButton(getString(R.string.yakin)){_,_ ->
+                            viewModel.logout()
+                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                            finish()
+                        }
+                        setNegativeButton(getString(R.string.batal)){_,_ ->
+
+                        }
+                        create()
+                        show()
+                    }
                     true
                 }
                 else -> false
             }
         }
     }
-
-    private fun setupAction() {
-        adapter.setOnClickCallback(object : StoryAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListStoryItem) {
-                showSelectedStory(data)
-            }
-        })
-    }
-
-    private fun showSelectedStory(data: ListStoryItem) {
-        val intent = Intent(this@MainActivity, DetailActivity::class.java)
-        intent.putExtra(DetailActivity.EXTRA_ID, data.id)
-        startActivity(intent)
-    }
-
-
 
     private fun setupData() {
         viewModel.getAllStories().observe(this){ result ->
@@ -114,4 +100,20 @@ class MainActivity : AppCompatActivity() {
         binding.rvStory.layoutManager = layoutManager
 
     }
+
+    override fun onBackPressed() {
+        AlertDialog.Builder(this).apply {
+            setTitle(getString(R.string.title_keluar_aplikasi))
+            setMessage(getString(R.string.message_keluar_aplikasi))
+            setPositiveButton(getString(R.string.yakin)){ _, _ ->
+                super.onBackPressed()
+            }
+            setNegativeButton(getString(R.string.batal)) { _, _ ->
+
+            }
+            create()
+            show()
+        }
+    }
+
 }

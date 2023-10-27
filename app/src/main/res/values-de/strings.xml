@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="email">E-Mail</string>
+    <string name="password">Passwort</string>
+    <string name="masuk">Anmelden</string>
+    <string name="nama">Name</string>
+    <string name="description">Beschreibung</string>
+    <string name="tambah">Hinzufügen</string>
+    <string name="logout">Abmelden</string>
+    <string name="ubah_bahasa">Sprache ändern</string>
+    <string name="galeri">Galerie</string>
+    <string name="kamera">Kamera</string>
+    <string name="tambah_story">Geschichte hinzufügen</string>
+    <string name="preview_image">Bildvorschau</string>
+    <string name="kirim">Senden</string>
+    <string name="greeting">Willkommen zurück!</string>
+    <string name="petunjuk">Melden Sie sich bei Ihrem Konto an</string>
+    <string name="petunjuk_register">Sie haben noch kein Konto?</string>
+    <string name="register">Konto erstellen</string>
+    <string name="greeting_register">Neues Konto erstellen</string>
+    <string name="petunjuk_form">Füllen Sie das Formular aus, um fortzufahren</string>
+    <string name="petunjuk_login">Haben Sie bereits ein Konto?</string>
+    <string name="title_keluar_aplikasi">Die Anwendung verlassen</string>
+    <string name="message_keluar_aplikasi">Sind Sie sicher, dass Sie die Anwendung verlassen möchten?</string>
+    <string name="yakin">Ja</string>
+    <string name="batal">Abbrechen</string>
+    <string name="message_logout">Sind Sie sicher, dass Sie sich abmelden möchten?</string>
+    <string name="title_keluar_akun">Abmelden</string>
+    <string name="validasi_email">Ungültige E-Mail</string>
+</resources>

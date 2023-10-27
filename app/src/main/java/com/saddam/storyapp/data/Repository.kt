@@ -35,6 +35,10 @@ class Repository private constructor(
             instance ?: synchronized(this){
                 instance ?: Repository(apiService, userPreference)
             }.also { instance = it }
+
+        fun clearInstance(){
+            instance = null
+        }
     }
 
     fun login(email: String, password: String): LiveData<Result<LoginResponse>>{
@@ -46,11 +50,6 @@ class Repository private constructor(
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()!!
-//                    val token = responseBody.loginResult?.token
-//                    val user = UserModel(email, token.toString())
-//                    Log.i(TAG, "token: ${token.toString()}")
-//                    val coroutine = CoroutineScope(Dispatchers.IO)
-//                    coroutine.launch { saveSession(user) }
                     Log.i(TAG, "onResponse: login berhasil")
                     result.value = Result.Success(responseBody)
                 }else{

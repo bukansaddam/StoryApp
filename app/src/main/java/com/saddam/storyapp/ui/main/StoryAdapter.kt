@@ -15,13 +15,7 @@ import com.saddam.storyapp.data.response.ListStoryItem
 import com.saddam.storyapp.databinding.ItemStoryBinding
 import com.saddam.storyapp.ui.detail.DetailActivity
 
-class StoryAdapter: ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
-
-    private lateinit var onItemClickCallback: OnItemClickCallback
-
-    fun setOnClickCallback(onItemClickCallback: OnItemClickCallback){
-        this.onItemClickCallback = onItemClickCallback
-    }
+class StoryAdapter(): ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     class MyViewHolder(val binding: ItemStoryBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(story: ListStoryItem){
@@ -57,9 +51,6 @@ class StoryAdapter: ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_C
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val story = getItem(position)
         holder.bind(story)
-//        holder.itemView.setOnClickListener {
-//            onItemClickCallback.onItemClicked(story)
-//        }
     }
 
     companion object {
@@ -73,9 +64,4 @@ class StoryAdapter: ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_C
             }
         }
     }
-
-    interface OnItemClickCallback{
-        fun onItemClicked(data: ListStoryItem)
-    }
-
 }

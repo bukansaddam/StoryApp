@@ -40,6 +40,11 @@ class SplashScreen : AppCompatActivity() {
         }
         supportActionBar?.hide()
 
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            startActivity(Intent(this@SplashScreen, LoginActivity::class.java))
+//            finish()
+//        }, 3000)
+
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.getUser().observe(this){ user ->
                 if (!user.isLogin){

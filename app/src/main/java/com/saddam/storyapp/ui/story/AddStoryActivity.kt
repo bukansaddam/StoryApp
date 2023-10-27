@@ -55,7 +55,7 @@ class AddStoryActivity : AppCompatActivity() {
                 requestBodyImage
             )
 
-            viewModel.postStory(multipartBody, requestBodyDescription).observe(this){result ->
+            viewModel.postStory(multipartBody, requestBodyDescription).observe(this){ result ->
                 when(result){
                     is Result.Loading -> {
                         binding.progressIndicator.visibility = View.VISIBLE
@@ -70,6 +70,7 @@ class AddStoryActivity : AppCompatActivity() {
                         binding.progressIndicator.visibility = View.GONE
                         showToast("Berhasil diupload")
                         startActivity(Intent(this@AddStoryActivity, MainActivity::class.java))
+                        finish()
                         true
                     }
                     else -> false
