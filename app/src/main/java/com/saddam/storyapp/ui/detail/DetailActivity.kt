@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.saddam.storyapp.R
 import com.saddam.storyapp.data.response.Story
 import com.saddam.storyapp.databinding.ActivityDetailBinding
 import com.saddam.storyapp.helper.Result
@@ -41,12 +42,12 @@ class DetailActivity : AppCompatActivity() {
                 }
                 is Result.Error -> {
                     binding.progressBar.isVisible = false
-                    Toast.makeText(this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.error_data), Toast.LENGTH_SHORT).show()
                     true
                 }
                 is Result.Success -> {
                     binding.progressBar.isVisible = false
-                    Toast.makeText(this, "berhasil", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, result.data.story?.name, Toast.LENGTH_SHORT).show()
                     setupData(result.data.story)
                 }
                 else -> false

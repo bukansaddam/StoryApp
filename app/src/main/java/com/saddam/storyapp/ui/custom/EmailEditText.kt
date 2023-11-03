@@ -29,7 +29,7 @@ class EmailEditText : AppCompatEditText {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        hint = "Email"
+        hint = context.getString(R.string.email)
         textAlignment = View.TEXT_ALIGNMENT_VIEW_START
         background = ContextCompat.getDrawable(context, R.drawable.bg_edit_text)
     }
@@ -44,7 +44,7 @@ class EmailEditText : AppCompatEditText {
 
             override fun afterTextChanged(p0: Editable?) {
                 if (!Patterns.EMAIL_ADDRESS.matcher(p0.toString()).matches()) {
-                    setError("Alamat Email tidak sesuai", null)
+                    setError(context.getString(R.string.error_email), null)
                 } else {
                     error = null
                 }

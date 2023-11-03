@@ -1,21 +1,22 @@
 package com.saddam.storyapp.ui.main
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.util.Pair
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.saddam.storyapp.data.response.ListStoryItem
 import com.saddam.storyapp.databinding.ItemStoryBinding
-import com.saddam.storyapp.ui.detail.DetailActivity
 
 class StoryAdapter(): ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnClickCallback(onItemClickCallback: OnItemClickCallback){
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     class MyViewHolder(val binding: ItemStoryBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(story: ListStoryItem){
@@ -24,21 +25,6 @@ class StoryAdapter(): ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF
                 .into(binding.ivItemPhoto)
             binding.tvItemName.text = "${story.name}"
             binding.tvItemDescription.text = "${story.description}"
-
-            itemView.setOnClickListener {
-                val intent = Intent(itemView.context, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_ID, story.id)
-
-                val optionsCompat: ActivityOptionsCompat =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        itemView.context as Activity,
-                        Pair(binding.ivItemPhoto, "image"),
-                        Pair(binding.tvItemName, "name"),
-                        Pair(binding.tvItemDescription, "description"),
-                    )
-
-                itemView.context.startActivity(intent, optionsCompat.toBundle())
-            }
 
         }
     }
@@ -51,6 +37,9 @@ class StoryAdapter(): ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val story = getItem(position)
         holder.bind(story)
+        holder.itemView.setOnClickListener{
+            onItemClickCallback.onItemClicked(story, holder)
+        }
     }
 
     companion object {
@@ -63,5 +52,9 @@ class StoryAdapter(): ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF
                 return oldItem == newItem
             }
         }
+    }
+
+    interface OnItemClickCallback{
+        fun onItemClicked(data: ListStoryItem, item: MyViewHolder)
     }
 }

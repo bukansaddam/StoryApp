@@ -28,4 +28,9 @@
     <string name="message_logout">Sind Sie sicher, dass Sie sich abmelden möchten?</string>
     <string name="title_keluar_akun">Abmelden</string>
     <string name="validasi_email">Ungültige E-Mail</string>
+    <string name="error_email">Alamat Email tidak sesuai</string>
+    <string name="error_password">Password tidak boleh kurang dari 8 karakter</string>
+    <string name="error_data">Data tidak ditemukan</string>
+    <string name="success_upload">Berhasil diupload</string>
+    <string name="error_image">Gambar tidak ditemukan</string>
 </resources>

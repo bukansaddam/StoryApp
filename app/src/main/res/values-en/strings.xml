@@ -28,4 +28,9 @@
     <string name="message_logout">Are you sure you want to log out?</string>
     <string name="title_keluar_akun">Log Out</string>
     <string name="validasi_email">Invalid Email</string>
+    <string name="error_email">Alamat Email tidak sesuai</string>
+    <string name="error_password">Password tidak boleh kurang dari 8 karakter</string>
+    <string name="error_data">Data tidak ditemukan</string>
+    <string name="success_upload">Berhasil diupload</string>
+    <string name="error_image">Gambar tidak ditemukan</string>
 </resources>

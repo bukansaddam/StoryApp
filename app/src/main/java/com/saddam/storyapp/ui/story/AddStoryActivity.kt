@@ -10,6 +10,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.saddam.storyapp.R
 import com.saddam.storyapp.databinding.ActivityAddStoryBinding
 import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
@@ -68,7 +69,7 @@ class AddStoryActivity : AppCompatActivity() {
                     }
                     is Result.Success -> {
                         binding.progressIndicator.visibility = View.GONE
-                        showToast("Berhasil diupload")
+                        showToast(getString(R.string.success_upload))
                         startActivity(Intent(this@AddStoryActivity, MainActivity::class.java))
                         finish()
                         true
@@ -77,7 +78,7 @@ class AddStoryActivity : AppCompatActivity() {
                 }
             }
 
-        } ?: showToast("Gambar tidak ditemukan")
+        } ?: showToast(getString(R.string.error_image))
     }
 
     private fun showLoading(isLoading: Boolean) {

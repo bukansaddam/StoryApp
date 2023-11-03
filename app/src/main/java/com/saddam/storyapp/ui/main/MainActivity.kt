@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saddam.storyapp.R
@@ -14,6 +16,7 @@ import com.saddam.storyapp.data.response.ListStoryItem
 import com.saddam.storyapp.databinding.ActivityMainBinding
 import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
+import com.saddam.storyapp.ui.detail.DetailActivity
 import com.saddam.storyapp.ui.login.LoginActivity
 import com.saddam.storyapp.ui.story.AddStoryActivity
 
@@ -90,9 +93,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun showSelectedUser(data: ListStoryItem, item: StoryAdapter.MyViewHolder) {
+
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_ID, data.id)
+
+            val optionsCompat: ActivityOptionsCompat =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this,
+                    Pair(item.binding.ivItemPhoto, "image"),
+                    Pair(item.binding.tvItemName, "name"),
+                    Pair(item.binding.tvItemDescription, "description"),
+                )
+
+            startActivity(intent, optionsCompat.toBundle())
+
+    }
+
     private fun setStoryData(data: List<ListStoryItem?>?) {
         adapter.submitList(data)
         binding.rvStory.adapter = adapter
+
+        adapter.setOnClickCallback(object : StoryAdapter.OnItemClickCallback{
+            override fun onItemClicked(
+                data: ListStoryItem,
+                item: StoryAdapter.MyViewHolder
+            ) {
+                showSelectedUser(data, item)
+            }
+        })
     }
 
     private fun setupList() {
