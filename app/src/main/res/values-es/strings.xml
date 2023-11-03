@@ -41,4 +41,5 @@
     <string name="hybrid_type">Hybrid</string>
     <string name="include_location">Tambahkan lokasi saya</string>
     <string name="error_lokasi">Lokasi tidak ditemukan. Coba lagi</string>
+    <string name="timeout">Timeout</string>
 </resources>

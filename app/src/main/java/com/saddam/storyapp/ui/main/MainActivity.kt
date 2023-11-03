@@ -3,7 +3,6 @@ package com.saddam.storyapp.ui.main
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -12,9 +11,10 @@ import androidx.core.util.Pair
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.saddam.storyapp.R
+import com.saddam.storyapp.adapter.LoadingStateAdapter
+import com.saddam.storyapp.adapter.StoryAdapter
 import com.saddam.storyapp.data.response.ListStoryItem
 import com.saddam.storyapp.databinding.ActivityMainBinding
-import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
 import com.saddam.storyapp.ui.detail.DetailActivity
 import com.saddam.storyapp.ui.login.LoginActivity
@@ -35,9 +35,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupData()
+//        setupData()
         setupToolbar()
         setupList()
+        setStoryData()
 
         binding.btnAddStory.setOnClickListener { moveToAddStory() }
     }
@@ -79,26 +80,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupData() {
-        viewModel.getAllStories().observe(this){ result ->
-            if (result != null){
-                when(result){
-                    is Result.Loading -> {
-                        binding.progressBar.isVisible = true
-                    }
-                    is Result.Error -> {
-                        binding.progressBar.isVisible = false
-                        Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
-                    }
-                    is Result.Success -> {
-                        binding.progressBar.isVisible = false
-                        setStoryData(result.data.listStory)
-                    }
-                }
-            }
-        }
-    }
-
     private fun showSelectedUser(data: ListStoryItem, item: StoryAdapter.MyViewHolder) {
 
             val intent = Intent(this, DetailActivity::class.java)
@@ -116,9 +97,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun setStoryData(data: List<ListStoryItem?>?) {
-        adapter.submitList(data)
-        binding.rvStory.adapter = adapter
+    private fun setStoryData() {
+        binding.progressBar.isVisible = true
+
+        binding.rvStory.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
+
+        viewModel.story.observe(this){
+            adapter.submitData(lifecycle, it)
+            binding.progressBar.isVisible = false
+        }
 
         adapter.setOnClickCallback(object : StoryAdapter.OnItemClickCallback{
             override fun onItemClicked(

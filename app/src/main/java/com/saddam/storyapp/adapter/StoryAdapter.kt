@@ -1,16 +1,16 @@
-package com.saddam.storyapp.ui.main
+package com.saddam.storyapp.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.saddam.storyapp.data.response.ListStoryItem
 import com.saddam.storyapp.databinding.ItemStoryBinding
 
-class StoryAdapter(): ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class StoryAdapter(): PagingDataAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -36,9 +36,13 @@ class StoryAdapter(): ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val story = getItem(position)
-        holder.bind(story)
+        if (story != null) {
+            holder.bind(story)
+        }
         holder.itemView.setOnClickListener{
-            onItemClickCallback.onItemClicked(story, holder)
+            if (story != null) {
+                onItemClickCallback.onItemClicked(story, holder)
+            }
         }
     }
 

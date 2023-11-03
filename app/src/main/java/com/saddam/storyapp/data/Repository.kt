@@ -4,10 +4,15 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.saddam.storyapp.data.pref.UserModel
 import com.saddam.storyapp.data.pref.UserPreference
 import com.saddam.storyapp.data.response.DetailResponse
 import com.saddam.storyapp.data.response.FileUploadResponse
+import com.saddam.storyapp.data.response.ListStoryItem
 import com.saddam.storyapp.data.response.LoginResponse
 import com.saddam.storyapp.data.response.RegisterResponse
 import com.saddam.storyapp.data.response.StoryResponse
@@ -93,28 +98,15 @@ class Repository private constructor(
         return result
     }
 
-    fun getAllstories() : LiveData<Result<StoryResponse>>{
-        val result = MutableLiveData<Result<StoryResponse>>()
-        result.value = Result.Loading
-
-        apiService.getAllStories().enqueue(object : Callback<StoryResponse>{
-            override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
-                if (response.isSuccessful){
-                    val responseBody = response.body()!!
-                    result.value = Result.Success(responseBody)
-                    Log.i(TAG, "onSuccess : ${responseBody.listStory}")
-                }else{
-                    Log.e("getAllStory", "onResponse: ${response.message()}", )
-                    result.value = Result.Error(response.message())
-                }
+    fun getAllStories(): LiveData<PagingData<ListStoryItem>>{
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                StoryPagingSource(apiService)
             }
-
-            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-                Log.e("getAllStory", "onFailure: $t", )
-                result.value = Result.Error(t.message.toString())
-            }
-        })
-        return result
+        ).liveData
     }
 
     fun getDetail(id: String) : LiveData<Result<DetailResponse>>{
