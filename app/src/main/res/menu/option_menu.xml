@@ -4,9 +4,9 @@
 
     <group android:menuCategory="container">
         <item
-            android:id="@+id/menu_add"
-            android:icon="@drawable/ic_add_24"
-            android:title="@string/tambah"
+            android:id="@+id/menu_maps"
+            android:icon="@drawable/ic_map_24"
+            android:title="@string/maps"
             app:showAsAction="ifRoom" />
 
         <item

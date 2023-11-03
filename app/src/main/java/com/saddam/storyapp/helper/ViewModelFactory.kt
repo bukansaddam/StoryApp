@@ -8,6 +8,7 @@ import com.saddam.storyapp.di.Injection
 import com.saddam.storyapp.ui.detail.DetailViewModel
 import com.saddam.storyapp.ui.login.LoginViewModel
 import com.saddam.storyapp.ui.main.MainViewModel
+import com.saddam.storyapp.ui.maps.MapsViewModel
 import com.saddam.storyapp.ui.register.RegisterViewModel
 import com.saddam.storyapp.ui.splash.SplashViewModel
 import com.saddam.storyapp.ui.story.StoryViewModel
@@ -28,6 +29,8 @@ ViewModelProvider.NewInstanceFactory() {
             return DetailViewModel(repository) as T
         }else if (modelClass.isAssignableFrom(StoryViewModel::class.java)) {
             return StoryViewModel(repository) as T
+        }else if (modelClass.isAssignableFrom(MapsViewModel::class.java)) {
+            return MapsViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

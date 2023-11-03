@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
@@ -98,6 +99,7 @@ class LoginActivity : AppCompatActivity() {
                         val token = result.data.loginResult?.token.toString()
                         val user = UserModel(email, token)
                         viewModel.saveSession(user)
+                        Log.i(TAG, "loginUser: ${user.token}")
                         ViewModelFactory.clearInstance()
                         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         finish()
@@ -120,5 +122,9 @@ class LoginActivity : AppCompatActivity() {
             create()
             show()
         }
+    }
+
+    companion object{
+        const val TAG = "Login Activity"
     }
 }

@@ -31,6 +31,14 @@ class DetailActivity : AppCompatActivity() {
         val id = intent.getStringExtra(EXTRA_ID)
 
         setupViewModel(id.toString())
+        configToolbar()
+    }
+
+    private fun configToolbar() {
+        val toolbar = binding.appBar
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     private fun setupViewModel(id: String) {
@@ -60,6 +68,12 @@ class DetailActivity : AppCompatActivity() {
             .load(data?.photoUrl)
             .into(binding.ivDetailPhoto)
         binding.tvDetailName.text = data?.name
+        supportActionBar?.title = data?.name
         binding.tvDetailDescription.text = data?.description
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 }

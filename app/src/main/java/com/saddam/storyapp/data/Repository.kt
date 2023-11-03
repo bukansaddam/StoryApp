@@ -168,6 +168,26 @@ class Repository private constructor(
         return result
     }
 
+    fun getStoryLocation(): LiveData<Result<StoryResponse>>{
+        val result = MutableLiveData<Result<StoryResponse>>()
+        result.value = Result.Loading
+
+        apiService.getStoryLocation().enqueue( object : Callback<StoryResponse>{
+            override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
+                if (response.isSuccessful){
+                    val responseBody = response.body()!!
+                    result.value = Result.Success(responseBody)
+                }
+            }
+
+            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+                result.value = Result.Error(t.message.toString())
+            }
+
+        })
+        return result
+    }
+
     suspend fun saveSession(user: UserModel) {
         userPreference.saveSession(user)
     }

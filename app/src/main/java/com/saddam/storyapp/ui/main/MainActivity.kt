@@ -18,12 +18,12 @@ import com.saddam.storyapp.helper.Result
 import com.saddam.storyapp.helper.ViewModelFactory
 import com.saddam.storyapp.ui.detail.DetailActivity
 import com.saddam.storyapp.ui.login.LoginActivity
+import com.saddam.storyapp.ui.maps.MapsActivity
 import com.saddam.storyapp.ui.story.AddStoryActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var token: String = ""
     private val adapter = StoryAdapter()
 
     private val viewModel by viewModels<MainViewModel> {
@@ -38,13 +38,19 @@ class MainActivity : AppCompatActivity() {
         setupData()
         setupToolbar()
         setupList()
+
+        binding.btnAddStory.setOnClickListener { moveToAddStory() }
+    }
+
+    private fun moveToAddStory() {
+        startActivity(Intent(this, AddStoryActivity::class.java))
     }
 
     private fun setupToolbar() {
         binding.appBar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
-                R.id.menu_add -> {
-                    startActivity(Intent(this, AddStoryActivity::class.java))
+                R.id.menu_maps -> {
+                    startActivity(Intent(this, MapsActivity::class.java))
                     true
                 }
                 R.id.menu_language -> {

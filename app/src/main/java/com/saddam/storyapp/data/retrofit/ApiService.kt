@@ -15,6 +15,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -47,4 +48,9 @@ interface ApiService {
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody
     ): Call<FileUploadResponse>
+
+    @GET("stories")
+    fun getStoryLocation(
+        @Query("location") location: Int = 1,
+    ): Call<StoryResponse>
 }
