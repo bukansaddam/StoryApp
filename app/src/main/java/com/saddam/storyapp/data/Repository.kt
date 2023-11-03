@@ -4,10 +4,13 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
+import com.saddam.storyapp.data.database.StoryDatabase
+import com.saddam.storyapp.data.paging.StoryRemoteMediator
 import com.saddam.storyapp.data.pref.UserModel
 import com.saddam.storyapp.data.pref.UserPreference
 import com.saddam.storyapp.data.response.DetailResponse
@@ -28,17 +31,19 @@ import retrofit2.Response
 
 class Repository private constructor(
     private val apiService: ApiService,
-    private val userPreference: UserPreference
+    private val userPreference: UserPreference,
+    private val storyDatabase: StoryDatabase,
 ){
     companion object{
         @Volatile
         private var instance: Repository? = null
         fun getInstance(
             apiService: ApiService,
-            userPreference: UserPreference
+            userPreference: UserPreference,
+            storyDatabase: StoryDatabase
         ): Repository =
             instance ?: synchronized(this){
-                instance ?: Repository(apiService, userPreference)
+                instance ?: Repository(apiService, userPreference, storyDatabase)
             }.also { instance = it }
 
         fun clearInstance(){
@@ -99,12 +104,14 @@ class Repository private constructor(
     }
 
     fun getAllStories(): LiveData<PagingData<ListStoryItem>>{
+        @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
+            remoteMediator = StoryRemoteMediator(storyDatabase, apiService),
             pagingSourceFactory = {
-                StoryPagingSource(apiService)
+                storyDatabase.storyDao().getAllStory()
             }
         ).liveData
     }

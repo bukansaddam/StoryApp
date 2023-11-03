@@ -50,7 +50,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun configToolbar() {
         val toolbar = binding.appBar
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Story Location"
+        supportActionBar?.title = getString(R.string.story_location)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
     }
