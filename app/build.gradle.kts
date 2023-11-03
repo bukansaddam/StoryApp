@@ -70,7 +70,10 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
     implementation("androidx.exifinterface:exifinterface:1.3.6")
+
+    //Maps
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     //Testing
     testImplementation("junit:junit:4.13.2")

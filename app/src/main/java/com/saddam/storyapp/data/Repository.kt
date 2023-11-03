@@ -142,11 +142,11 @@ class Repository private constructor(
         return result
     }
 
-    fun sendStory(file: MultipartBody.Part, description: RequestBody) : LiveData<Result<FileUploadResponse>>{
+    fun sendStory(file: MultipartBody.Part, description: RequestBody, latitude: RequestBody, longitude: RequestBody) : LiveData<Result<FileUploadResponse>>{
         val result = MutableLiveData<Result<FileUploadResponse>>()
         result.value = Result.Loading
 
-        val client = apiService.addStory(file, description)
+        val client = apiService.addStory(file, description, latitude, longitude)
         client.enqueue(object: Callback<FileUploadResponse>{
             override fun onResponse(
                 call: Call<FileUploadResponse>,

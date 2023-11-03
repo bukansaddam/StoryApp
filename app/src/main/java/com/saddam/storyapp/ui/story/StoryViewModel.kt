@@ -7,6 +7,10 @@ import okhttp3.RequestBody
 
 class StoryViewModel(private val repository: Repository): ViewModel() {
 
-    fun postStory(file: MultipartBody.Part, description: RequestBody) = repository.sendStory(file, description)
+    fun postStory(
+        file: MultipartBody.Part,
+        description: RequestBody,
+        latitude: RequestBody,
+        longitude: RequestBody) = repository.sendStory(file, description, latitude, longitude)
 
 }

@@ -46,7 +46,9 @@ interface ApiService {
     @POST("stories")
     fun addStory(
         @Part file: MultipartBody.Part,
-        @Part("description") description: RequestBody
+        @Part("description") description: RequestBody,
+        @Part("lat") latitude: RequestBody,
+        @Part("lon") longitude: RequestBody
     ): Call<FileUploadResponse>
 
     @GET("stories")

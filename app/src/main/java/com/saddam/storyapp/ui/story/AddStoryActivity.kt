@@ -1,6 +1,9 @@
 package com.saddam.storyapp.ui.story
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +13,9 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.saddam.storyapp.R
 import com.saddam.storyapp.databinding.ActivityAddStoryBinding
 import com.saddam.storyapp.helper.Result
@@ -26,6 +32,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 class AddStoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddStoryBinding
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val viewModel by viewModels<StoryViewModel> {
         ViewModelFactory.getInstance(this)
     }
@@ -39,16 +46,72 @@ class AddStoryActivity : AppCompatActivity() {
 
         binding.btnGalleryFile.setOnClickListener { startGallery() }
         binding.btnGalleryCamera.setOnClickListener { startCamera() }
-        binding.btnGallerySend.setOnClickListener { uploadStory() }
+        binding.btnGallerySend.setOnClickListener { uploadStory("0","0") }
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        binding.addLocation.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked){
+                getMyLocation()
+            }
+        }
     }
 
-    private fun uploadStory() {
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            when{
+                permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false -> {
+                    getMyLocation()
+                }
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false -> {
+                    getMyLocation()
+                }
+                else -> {
+                    
+                }
+            }
+        }
+    
+    private fun checkPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun getMyLocation() {
+        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) && 
+            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+            ){
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null){
+                    val latitude = location.latitude.toString()
+                    val longitude = location.longitude.toString()
+                    binding.btnGallerySend.setOnClickListener { uploadStory(latitude, longitude) }
+                }else{
+                    Toast.makeText(this, getString(R.string.error_lokasi), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }else {
+            requestPermissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+    }
+
+    private fun uploadStory(latitude: String, longitude: String) {
         currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this).reduceFileImage()
             val description = binding.etGalleryDescription.text.toString()
             showLoading(true)
 
             val requestBodyDescription = description.toRequestBody("text/plain".toMediaType())
+            val requestBodyLatitude = latitude.toRequestBody("text/plain".toMediaType())
+            val requestBodyLongitude = longitude.toRequestBody("text/plain".toMediaType())
             val requestBodyImage = imageFile.asRequestBody("image/jpeg".toMediaType())
             val multipartBody = MultipartBody.Part.createFormData(
                 "photo",
@@ -56,7 +119,7 @@ class AddStoryActivity : AppCompatActivity() {
                 requestBodyImage
             )
 
-            viewModel.postStory(multipartBody, requestBodyDescription).observe(this){ result ->
+            viewModel.postStory(multipartBody, requestBodyDescription, requestBodyLatitude, requestBodyLongitude).observe(this){ result ->
                 when(result){
                     is Result.Loading -> {
                         binding.progressIndicator.visibility = View.VISIBLE
